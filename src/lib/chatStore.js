@@ -6,6 +6,12 @@ export const useChatStore = create((set) => ({
   user: null,
   isCurrentUserBlocked: false,
   isReceiverBlocked: false,
+  showDeleteButtons: false, // Add this state
+  changeBlock: () =>
+    set((state) => ({ isReceiverBlocked: !state.isReceiverBlocked })),
+  resetChat: () => set({ chatId: null, user: null }),
+  toggleDeleteButtons: () =>
+    set((state) => ({ showDeleteButtons: !state.showDeleteButtons })), // Add this action
   changeChat: (chatId, user) => {
     const currentUser = useUserStore.getState().currentUser;
 

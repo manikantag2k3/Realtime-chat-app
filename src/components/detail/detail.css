@@ -19,6 +19,19 @@
   border-radius: 50%;
   object-fit: cover;
 }
+.detail .info button.delete {
+  padding: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.detail .info button.delete:hover {
+  background-color: #ff1a1a;
+}
 
 /* Assuming .option > .title is the container for both the span and Photos component */
 .option > .title {

@@ -8,6 +8,7 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import { format } from "timeago.js";
+import { deleteMessage } from "../../lib/firebase";
 
 const Chat = ({ infoprop }) => {
   const [chat, setChat] = useState();
@@ -25,6 +26,7 @@ const Chat = ({ infoprop }) => {
   const mediaRecorderRef = useRef(null);
 
   const { currentUser } = useUserStore();
+  const { showDeleteButtons } = useChatStore(); // Get the state
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
 
@@ -55,6 +57,14 @@ const Chat = ({ infoprop }) => {
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0]),
       });
+    }
+  };
+
+  const handleDelete = async (message) => {
+    try {
+      await deleteMessage(chatId, message);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -177,18 +187,21 @@ const Chat = ({ infoprop }) => {
         </div>
       </div>
       <div className="center">
-        {chat?.messages?.map((message) => (
+        {chat?.messages?.map((message, index) => (
           <div
             className={
               message.senderId === currentUser?.id ? "message own" : "message"
             }
-            key={message?.createdAt?.seconds}
+            key={index}
           >
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
               {message.audio && <audio controls src={message.audio}></audio>}
               {message.text && <p>{message.text}</p>}
               <span>{format(message.createdAt.toDate())}</span>
+              {showDeleteButtons && message.senderId === currentUser?.id && (
+                <button className="del-button" onClick={() => handleDelete(message)}>Delete</button>
+              )}
             </div>
           </div>
         ))}
