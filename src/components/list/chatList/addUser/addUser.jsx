@@ -1,3 +1,5 @@
+
+import React, { useState, useEffect, useRef } from "react";
 import "./addUser.css";
 import { db } from "../../../../lib/firebase";
 import {
@@ -12,11 +14,12 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useState } from "react";
 import { useUserStore } from "../../../../lib/userStore";
 
-const AddUser = () => {
+const AddUser = ({ setAddMode, setIcon }) => {
   const [user, setUser] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const addUserRef = useRef(null);
 
   const { currentUser } = useUserStore();
 
@@ -27,9 +30,7 @@ const AddUser = () => {
 
     try {
       const userRef = collection(db, "users");
-
       const q = query(userRef, where("username", "==", username));
-
       const querySnapShot = await getDocs(q);
 
       if (!querySnapShot.empty) {
@@ -45,7 +46,6 @@ const AddUser = () => {
     const userChatsRef = collection(db, "userchats");
 
     try {
-      // Check if the user is already in the current user's chat list
       const currentUserChatsDoc = await getDoc(
         doc(userChatsRef, currentUser.id)
       );
@@ -89,8 +89,25 @@ const AddUser = () => {
     }
   };
 
+  const handleClickOutside = (event) => {
+    if (addUserRef.current && !addUserRef.current.contains(event.target)) {
+      setIsVisible(false);
+      setAddMode(false);
+      setIcon("plus.png");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  if (!isVisible) return null;
+
   return (
-    <div className="addUser">
+    <div className="addUser" ref={addUserRef}>
       <form onSubmit={handleSearch}>
         <input type="text" placeholder="Username" name="username" />
         <button>Search</button>

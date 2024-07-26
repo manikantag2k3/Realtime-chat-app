@@ -19,9 +19,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log("Setting up auth state changed listener");
+    // console.log("Setting up auth state changed listener");
     const unSub = onAuthStateChanged(auth, (user) => {
-      console.log("Auth state changed", user);
+      // console.log("Auth state changed", user);
       fetchUserInfo(user?.uid);
     });
 
@@ -32,17 +32,17 @@ const App = () => {
     updateSchema();
 
     return () => {
-      console.log("Cleaning up auth state changed listener");
+      // console.log("Cleaning up auth state changed listener");
       unSub();
     };
   }, [fetchUserInfo]);
 
   if (isLoading) {
-    console.log("App is loading");
+    // console.log("App is loading");
     return <div className="loading">Loading...</div>;
   }
 
-  console.log("Rendering App", { currentUser, chatId });
+  // console.log("Rendering App", { currentUser, chatId });
 
   return (
     <div className="container">
