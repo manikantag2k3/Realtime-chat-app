@@ -1,3 +1,4 @@
+
 .chat {
   flex: 2;
   border-left: 1px solid #dddddd35;
@@ -96,6 +97,7 @@
           object-fit: cover;
         }
 
+       
         p {
           padding: 20px;
           background-color: rgba(17, 25, 40, 0.3);
@@ -222,4 +224,47 @@
       cursor: pointer;
     }
   }
+}
+
+
+
+
+.texts {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+.recordButton:disabled {
+  background-color: #5182feb4;
+  cursor: not-allowed;
+}
+
+
+.recorded-audio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+
+.recorded-audio audio {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+
+.recorded-audio button {
+  background-color: #5183fe;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
