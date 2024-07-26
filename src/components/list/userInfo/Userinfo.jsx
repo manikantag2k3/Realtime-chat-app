@@ -1,7 +1,7 @@
 import "./userInfo.css";
 import { useUserStore } from "../../../lib/userStore";
 import { useState, useEffect } from "react";
-import { db } from "../../../lib/firebase";
+import { auth, db } from "../../../lib/firebase";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import DescriptionModal from "./DescriptionModal.jsx";
 
@@ -21,6 +21,10 @@ const Userinfo = () => {
 
     return () => unsubscribe();
   }, [currentUser, setCurrentUser]);
+
+  const handleLogout = () => {
+    auth.signOut();
+  };
 
   const handleDescriptionSave = async (newDescription) => {
     const userDocRef = doc(db, "users", currentUser.id);
@@ -43,9 +47,14 @@ const Userinfo = () => {
         </div>
       </div>
       <div className="icons">
-        <img src="./more.png" alt="" />
-        <img src="./video.png" alt="" />
-        <img src="./edit.png" alt="" onClick={toggleEditing} />
+        <img
+          src="./logout.png"
+          alt="Logout"
+          onClick={handleLogout}
+          style={{ width: "24px", height: "24px" }}
+        />
+        <img src="./video.png" alt="Video" />
+        <img src="./edit.png" alt="Edit" onClick={toggleEditing} />
       </div>
       <DescriptionModal
         isOpen={isEditing}
