@@ -1,0 +1,56 @@
+
+ .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.modal-content {
+  background: var(--background-color, #333); /* Dark background color */
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add gap between elements */
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 1.5rem; /* Adjust font size */
+  color: var(--primary-color, #fff); /* Light primary color */
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 10px; /* Add padding for better user experience */
+  border: 1px solid var(--border-color, #555); /* Dark border color */
+  border-radius: 4px;
+  font-size: 1rem; /* Adjust font size */
+  background-color: var(--textarea-background-color, #444); /* Dark textarea background color */
+  color: var(--textarea-text-color, #fff); /* Light textarea text color */
+}
+
+.modal-content button {
+  padding: 10px 15px; /* Add padding for better user experience */
+  border: none;
+  border-radius: 4px;
+  background-color: var(--button-background-color, #555); /* Dark button background color */
+  color: var(--button-text-color, #fff); /* Light button text color */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add transition for hover effect */
+}
+
+.modal-content button:hover {
+  background-color: var(--button-hover-background-color, #777); /* Darker button hover background color */
+}
