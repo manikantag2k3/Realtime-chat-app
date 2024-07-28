@@ -3,7 +3,6 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, doc, updateDoc, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
-console.log("API Key:", import.meta.env.VITE_API_KEY);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
