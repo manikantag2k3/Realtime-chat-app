@@ -9,13 +9,14 @@ import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { useUserStore } from "../../lib/userStore";
 
 const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
   });
-
+   const { fetchUserInfo } = useUserStore();
   const [loading, setLoading] = useState(false);
 
   const handleAvatar = (e) => {
@@ -87,8 +88,13 @@ const Login = () => {
     const { email, password } = Object.fromEntries(formData);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log("Login Success");
+      fetchUserInfo(userCredential.user.uid);
     } catch (err) {
       console.log("Login Error:", err);
       toast.error(err.message);
