@@ -4,7 +4,7 @@ import { getFirestore, doc, updateDoc, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBaVYLoAtYxp0zgPd9MUILbOjGXjdVYuLY",
+  apiKey: process.env.apiKey,
   authDomain: "realtime-chat-5558d.firebaseapp.com",
   projectId: "realtime-chat-5558d",
   storageBucket: "realtime-chat-5558d.appspot.com",
