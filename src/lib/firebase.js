@@ -3,6 +3,8 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, doc, updateDoc, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
+console.log('API Key:', process.env.REACT_APP_API_KEY);
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "realtime-chat-5558d.firebaseapp.com",
