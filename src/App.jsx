@@ -10,13 +10,22 @@ import { useUserStore } from "./lib/userStore";
 import { useChatStore } from "./lib/chatStore";
 import { updateUserSchema } from "./components/list/userInfo/updateUserSchema";
 
+
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   const { chatId } = useChatStore();
   const [info,setInfo]=useState(false);
+  const [view, setView] = useState(false);
   const handleInfo=()=>{
     setInfo(!info);
   }
+  const handleBack = () => {
+    setView(false);
+  };
+
+  const handleChatSelect = () => {
+    setView(true);
+  };
 
   useEffect(() => {
     // console.log("Setting up auth state changed listener");
@@ -48,9 +57,9 @@ const App = () => {
     <div className="container">
       {currentUser ? (
         <>
-          <List />
-          {chatId && <Chat infoprop={handleInfo}/>}
-          {chatId&& info && <Detail />}
+          <List onChatSelect={handleChatSelect} onBack={handleBack} />
+          {view && chatId && <Chat infoprop={handleInfo} onBack={handleBack} />}
+          {view && chatId && info && <Detail />}
         </>
       ) : (
         <Login />

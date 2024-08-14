@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./chatList.css";
 import AddUser from "./addUser/addUser";
 import { useUserStore } from "../../../lib/userStore";
@@ -10,7 +10,6 @@ const ChatList = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [input, setInput] = useState("");
-  const [icon, setIcon] = useState("plus.png");
   const [lastMessages, setLastMessages] = useState({});
 
   const { currentUser } = useUserStore();
@@ -101,16 +100,11 @@ const ChatList = ({ onChatSelect }) => {
     c.user.username.toLowerCase().includes(input.toLowerCase())
   );
 
-  const handleToggleAddUser = () => {
-    setAddMode(!addMode);
-    setIcon(addMode ? "plus.png" : "minus.png");
-  };
-
   return (
     <div className="chatList">
       <div className="search">
         <div className="searchBar">
-          <img src="./search.png" alt="search icon" />
+          <img src="./search.png" alt="" />
           <input
             type="text"
             placeholder="Search"
@@ -118,10 +112,10 @@ const ChatList = ({ onChatSelect }) => {
           />
         </div>
         <img
-          src={`./${icon}`}
-          alt="toggle icon"
+          src={addMode ? "./minus.png" : "./plus.png"}
+          alt=""
           className="add"
-          onClick={handleToggleAddUser}
+          onClick={() => setAddMode((prev) => !prev)}
         />
       </div>
       {filteredChats.map((chat) => (
@@ -129,18 +123,18 @@ const ChatList = ({ onChatSelect }) => {
           className="item"
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
-          style={{
-            backgroundColor: chat?.isSeen ? "transparent" : "#5183fe",
-          }}
         >
-          <img
-            src={
-              chat.user.blocked.includes(currentUser.id)
-                ? "./avatar.png"
-                : chat.user.avatar || "./avatar.png"
-            }
-            alt="avatar"
-          />
+          <div className="avatar-container">
+            <img
+              src={
+                chat.user.blocked.includes(currentUser.id)
+                  ? "./avatar.png"
+                  : chat.user.avatar || "./avatar.png"
+              }
+              alt=""
+            />
+            {/* {!chat.isSeen && <div className="unread-dot"></div>} */}
+          </div>
           <div className="texts">
             <span>
               {chat.user.blocked.includes(currentUser.id)
@@ -152,7 +146,7 @@ const ChatList = ({ onChatSelect }) => {
         </div>
       ))}
 
-      {addMode && <AddUser setAddMode={setAddMode} setIcon={setIcon} />}
+      {addMode && <AddUser />}
     </div>
   );
 };

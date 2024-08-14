@@ -1,18 +1,13 @@
-
 import React from "react";
-import { useUserStore } from "../../lib/userStore";
-import { db } from "../../lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
 import ChatList from "./chatList/ChatList";
 import Userinfo from "./userInfo/Userinfo";
 import "./list.css";
 
-const List = () => {
- 
+const List = ({ onChatSelect , onBack}) => {
   return (
     <div className="list">
-      <Userinfo />
-      <ChatList />
+      <Userinfo onBack={onBack} />
+      <ChatList onChatSelect={onChatSelect} />
     </div>
   );
 };
