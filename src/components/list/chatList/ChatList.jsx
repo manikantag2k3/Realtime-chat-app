@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./chatList.css";
 import AddUser from "./addUser/addUser";
 import { useUserStore } from "../../../lib/userStore";
@@ -6,10 +6,12 @@ import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 
-const ChatList = () => {
+const ChatList = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [input, setInput] = useState("");
+  const [icon, setIcon] = useState("plus.png");
+  const [lastMessages, setLastMessages] = useState({});
 
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
@@ -23,14 +25,12 @@ const ChatList = () => {
         const promises = items.map(async (item) => {
           const userDocRef = doc(db, "users", item.receiverId);
           const userDocSnap = await getDoc(userDocRef);
-
           const user = userDocSnap.data();
 
           return { ...item, user };
         });
 
         const chatData = await Promise.all(promises);
-
         setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
       }
     );
@@ -39,6 +39,38 @@ const ChatList = () => {
       unSub();
     };
   }, [currentUser.id]);
+
+  useEffect(() => {
+    const unSubscribes = chats.map((chat) => {
+      const chatDocRef = doc(db, "chats", chat.chatId);
+      return onSnapshot(chatDocRef, (res) => {
+        const chatData = res.data();
+        if (chatData?.messages?.length > 0) {
+          const lastMessage = chatData.messages[chatData.messages.length - 1];
+          setLastMessages((prev) => ({
+            ...prev,
+            [chat.chatId]: lastMessage.text,
+          }));
+          setChats((prevChats) => {
+            return prevChats.map((c) => {
+              if (c.chatId === chat.chatId) {
+                return {
+                  ...c,
+                  isSeen:
+                    lastMessage.senderId !== currentUser.id ? false : c.isSeen,
+                };
+              }
+              return c;
+            });
+          });
+        }
+      });
+    });
+
+    return () => {
+      unSubscribes.forEach((unSub) => unSub());
+    };
+  }, [chats, currentUser.id]);
 
   const handleSelect = async (chat) => {
     const userChats = chats.map((item) => {
@@ -59,6 +91,7 @@ const ChatList = () => {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
+      onChatSelect();
     } catch (err) {
       console.log(err);
     }
@@ -68,11 +101,16 @@ const ChatList = () => {
     c.user.username.toLowerCase().includes(input.toLowerCase())
   );
 
+  const handleToggleAddUser = () => {
+    setAddMode(!addMode);
+    setIcon(addMode ? "plus.png" : "minus.png");
+  };
+
   return (
     <div className="chatList">
       <div className="search">
         <div className="searchBar">
-          <img src="./search.png" alt="" />
+          <img src="./search.png" alt="search icon" />
           <input
             type="text"
             placeholder="Search"
@@ -80,10 +118,10 @@ const ChatList = () => {
           />
         </div>
         <img
-          src={addMode ? "./minus.png" : "./plus.png"}
-          alt=""
+          src={`./${icon}`}
+          alt="toggle icon"
           className="add"
-          onClick={() => setAddMode((prev) => !prev)}
+          onClick={handleToggleAddUser}
         />
       </div>
       {filteredChats.map((chat) => (
@@ -101,7 +139,7 @@ const ChatList = () => {
                 ? "./avatar.png"
                 : chat.user.avatar || "./avatar.png"
             }
-            alt=""
+            alt="avatar"
           />
           <div className="texts">
             <span>
@@ -109,12 +147,12 @@ const ChatList = () => {
                 ? "User"
                 : chat.user.username}
             </span>
-            <p>{chat.lastMessage}</p>
+            <p>{lastMessages[chat.chatId] || ""}</p>
           </div>
         </div>
       ))}
 
-      {addMode && <AddUser />}
+      {addMode && <AddUser setAddMode={setAddMode} setIcon={setIcon} />}
     </div>
   );
 };

@@ -26,7 +26,7 @@ const Chat = ({ infoprop }) => {
   const mediaRecorderRef = useRef(null);
 
   const { currentUser } = useUserStore();
-  const { showDeleteButtons } = useChatStore(); // Get the state
+  const { showDeleteButtons } = useChatStore(); 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
 
