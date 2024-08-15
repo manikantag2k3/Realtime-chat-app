@@ -3,15 +3,25 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, doc, updateDoc, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
+//old
+// const firebaseConfig = {
+//   apiKey: import.meta.env.VITE_API_KEY,
+//   authDomain: "realtime-chat-5558d.firebaseapp.com",
+//   projectId: "realtime-chat-5558d",
+//   storageBucket: "realtime-chat-5558d.appspot.com",
+//   messagingSenderId: "1019578288071",
+//   appId: "1:1019578288071:web:037969dfa9ad92fff8fbe2",
+// };
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: "realtime-chat-5558d.firebaseapp.com",
-  projectId: "realtime-chat-5558d",
-  storageBucket: "realtime-chat-5558d.appspot.com",
-  messagingSenderId: "1019578288071",
-  appId: "1:1019578288071:web:037969dfa9ad92fff8fbe2",
+  authDomain: "chat-app-2-7aeae.firebaseapp.com",
+  projectId: "chat-app-2-7aeae",
+  storageBucket: "chat-app-2-7aeae.appspot.com",
+  messagingSenderId: "724375516147",
+  appId: "1:724375516147:web:35962b108eccd372c75886",
 };
+
 
 const app = initializeApp(firebaseConfig);
 
