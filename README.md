@@ -9,3 +9,4 @@ This is a chat application built with React, Firebase, and Vite. It supports rea
 - File storage (images and audio)
 - Responsive design
 
+## Project deployed at https://miniproject-017.netlify.app
